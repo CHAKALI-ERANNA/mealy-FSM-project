@@ -1,0 +1,105 @@
+`timescale 1ns / 1ps
+
+module mealy_FSM_project(X,Z,clk,rst
+
+    );
+    input clk,rst;
+    input [1:0]X;
+    output reg [1:0]Z;
+    
+    reg [1:0]cur_state,nxt_state;
+    
+    parameter S00 = 2'b00;
+    parameter S01 = 2'b01;
+    parameter S10 = 2'b10;
+    parameter S11 = 2'b11;
+    
+    always@(posedge clk)
+    begin
+        if(rst)
+            cur_state <= S00;
+        else
+            cur_state <= nxt_state;
+    end
+    
+    always@(cur_state,X)
+    begin
+        case(cur_state)
+        S00 : if(X == 2'b00)
+                nxt_state <= S00;
+              else if(X == 2'b01)
+                nxt_state <= S01;
+              else if(X == 2'b10)
+                nxt_state <= S10;
+              else
+                nxt_state <= S11;
+       
+        S01 : if(X == 2'b00)
+                nxt_state <= S00;
+              else if(X == 2'b01)
+                nxt_state <= S01;
+              else if(X == 2'b10)
+                nxt_state <= S10;
+              else
+                nxt_state <= S11;
+        S10 : if(X == 2'b00)
+                nxt_state <= S00;
+              else if(X == 2'b01)
+                nxt_state <= S01;
+              else if(X == 2'b10)
+                nxt_state <= S10;
+              else
+                nxt_state <= S11;
+               
+         S11 : if(X == 2'b00)
+                 nxt_state <= S00;
+               else if(X == 2'b01)
+                 nxt_state <= S01;
+               else if(X == 2'b10)
+                 nxt_state <= S10;
+               else
+                 nxt_state <= S11;
+                 
+         default nxt_state <= S00;
+      endcase
+    end
+    
+    always@(posedge clk)
+    begin
+        case(cur_state)
+        S00 : if (X == 2'b00)
+                Z <= 2'b00;
+              else if (X == 2'b01)
+                Z <= 2'b10;
+              else if (X == 2'b10)
+                Z <= 2'b10;
+              else if (X == 2'b11)
+                Z <= 2'b10;
+        S01 : if (X == 2'b00)
+                Z <= 2'b01;
+              else if (X == 2'b01)
+                Z <= 2'b00;
+              else if (X == 2'b10)
+                Z <= 2'b10;
+              else if (X == 2'b11)
+                Z <= 2'b10;
+                                       
+        S10 : if (X == 2'b00)
+                Z <= 2'b01;
+              else if (X == 2'b01)
+                Z <= 2'b01;
+              else if (X == 2'b10)
+                Z <= 2'b00;
+              else if (X == 2'b11)
+                Z <= 2'b10;
+        S11 : if(X == 2'b00)
+                Z <= 2'b01;
+              else if (X==2'b01)
+                Z <= 2'b01;
+              else if (X==2'b10)
+                Z <= 2'b01;
+              else if (X==2'b11)
+                Z <= 2'b00;
+         endcase    
+    end
+endmodule

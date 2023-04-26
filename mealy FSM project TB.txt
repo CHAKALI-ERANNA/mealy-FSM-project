@@ -1,0 +1,59 @@
+`timescale 1ns / 1ps
+
+
+module mealy_FSM_project_TB;
+    reg clk,rst;
+    reg [1:0]X;
+    
+    wire [1:0]Z;
+    
+    always #5 clk = ~clk;
+    
+    mealy_FSM_project uut(X,Z,clk,rst);
+    
+    task initialise;
+    begin
+        clk = 0;
+        rst = 0;
+        X = 2'b00;
+    end
+    endtask
+    
+    task reset;
+    begin
+        @(negedge clk)
+        rst = 1;
+        @(negedge clk)
+        rst = 0;
+    end
+    endtask
+    
+    task data(input [1:0]a);
+    begin
+        @(posedge clk)
+        X  = a;
+    end
+    endtask
+    
+    initial begin
+        initialise;
+        #5;
+        reset;
+        data(2'b00);
+        data(2'b01);
+        data(2'b01);
+        data(2'b00);
+        data(2'b10);
+        data(2'b11);
+        data(2'b01);
+        data(2'b10);
+        data(2'b10);
+        reset;
+    
+        repeat(8)
+        begin
+            data($random%4);
+        end    
+        #10 $finish;
+      end        
+endmodule
